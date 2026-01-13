@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* SkilDyn Design System */
+
+@layer base {
+  :root {
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 142 71% 45%;
+    --secondary-foreground: 0 0% 100%;
+
+    --accent: 38 92% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 217 91% 60%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217 91% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer components {
+  .section-container {
+    @apply w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .heading-hero {
+    @apply text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-foreground;
+  }
+  
+  .heading-section {
+    @apply text-2xl sm:text-3xl font-bold text-foreground;
+  }
+  
+  .text-body {
+    @apply text-base sm:text-lg text-muted-foreground;
+  }
+}
+
+/* Custom SkilDyn semantic classes for backward compatibility */
+@layer utilities {
+  .bg-skildyn-background {
+    @apply bg-background;
+  }
+  .bg-skildyn-primary {
+    @apply bg-primary;
+  }
+  .text-skildyn-text {
+    @apply text-foreground;
+  }
+  .text-skildyn-primary {
+    @apply text-primary;
+  }
+  .border-skildyn-border {
+    @apply border-border;
+  }
+  .border-skildyn-primary {
+    @apply border-primary;
+  }
+  .text-skildyn-success {
+    @apply text-secondary;
+  }
+  .bg-skildyn-success {
+    @apply bg-secondary;
+  }
+  .text-skildyn-accent {
+    @apply text-accent;
+  }
+}
