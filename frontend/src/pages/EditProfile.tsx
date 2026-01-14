@@ -204,12 +204,22 @@ const EditProfile = () => {
               accept="image/*"
               className="hidden"
             />
-            <Button
-              variant="outline"
-              onClick={() => fileInputRef.current?.click()}
-            >
-              Change photo
-            </Button>
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                Change photo
+              </Button>
+              {previewPhoto && (
+                <Button
+                  variant="outline"
+                  onClick={() => setPreviewPhoto(null)}
+                >
+                  Remove photo
+                </Button>
+              )}
+            </div>
           </CardContent>
         </Card>
 
@@ -332,14 +342,14 @@ const EditProfile = () => {
                   value={[hoursPerDay]}
                   onValueChange={(value) => setHoursPerDay(value[0])}
                   min={1}
-                  max={10}
+                  max={8}
                   step={1}
                   className="w-full"
                 />
                 <div className="flex justify-between text-sm text-muted-foreground">
                   <span>1 hour</span>
                   <span className="font-medium text-foreground">{hoursPerDay} hours/day</span>
-                  <span>10 hours</span>
+                  <span>10 hours </span>
                 </div>
               </div>
             </div>

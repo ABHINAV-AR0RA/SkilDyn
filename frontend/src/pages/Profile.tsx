@@ -32,7 +32,7 @@ const Profile = () => {
       { name: "Node.js", level: "intermediate" },
       { name: "Figma", level: "beginner" },
     ],
-    availability: "10-15 hours/week",
+    availability: "10-15 hours/day",
     interests: ["AI/ML", "Web Development", "Open Source", "EdTech"],
     projects: [
       { name: "EcoTracker", description: "Carbon footprint tracking app", link: "https://github.com/alexjohnson/ecotracker" },
