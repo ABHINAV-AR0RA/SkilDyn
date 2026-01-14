@@ -103,7 +103,7 @@ const TeamDiscovery = () => {
             <Button 
               variant="ghost" 
               size="icon"
-              onClick={() => navigate(`/hackathon/${hackathonId || '1'}`)}
+              onClick={() => navigate(-1)}
               className="shrink-0"
             >
               <ArrowLeft className="h-5 w-5" />
