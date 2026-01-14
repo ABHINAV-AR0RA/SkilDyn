@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
 import { ArrowLeft, Plus, X, Trash2, Camera } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useProfilePhoto } from "@/contexts/ProfilePhotoContext";
@@ -18,7 +19,12 @@ interface Skill {
 
 interface Project {
   name: string;
-  description: string;
+  link: string;
+}
+
+interface Certification {
+  name: string;
+  verificationLink: string;
 }
 
 const EditProfile = () => {
@@ -40,17 +46,21 @@ const EditProfile = () => {
   const [interests, setInterests] = useState<string[]>(["AI/ML", "Web Development", "Open Source"]);
   const [newInterest, setNewInterest] = useState("");
 
-  const [availability, setAvailability] = useState("10-15");
+  const [hoursPerDay, setHoursPerDay] = useState(3);
 
   const [projects, setProjects] = useState<Project[]>([
-    { name: "EcoTracker", description: "Carbon footprint tracking app" },
+    { name: "EcoTracker", link: "https://github.com/alexjohnson/ecotracker" },
   ]);
   const [newProjectName, setNewProjectName] = useState("");
-  const [newProjectDesc, setNewProjectDesc] = useState("");
+  const [newProjectLink, setNewProjectLink] = useState("");
   const [showProjectForm, setShowProjectForm] = useState(false);
 
-  const [certifications, setCertifications] = useState<string[]>(["AWS Cloud Practitioner"]);
-  const [newCert, setNewCert] = useState("");
+  const [certifications, setCertifications] = useState<Certification[]>([
+    { name: "AWS Cloud Practitioner", verificationLink: "https://aws.amazon.com/verification/12345" },
+  ]);
+  const [newCertName, setNewCertName] = useState("");
+  const [newCertLink, setNewCertLink] = useState("");
+  const [showCertForm, setShowCertForm] = useState(false);
 
   const [linkedIn, setLinkedIn] = useState("linkedin.com/in/alexjohnson");
   const [github, setGithub] = useState("github.com/alexjohnson");
@@ -86,10 +96,10 @@ const EditProfile = () => {
   };
 
   const handleAddProject = () => {
-    if (newProjectName.trim()) {
-      setProjects([...projects, { name: newProjectName.trim(), description: newProjectDesc.trim() }]);
+    if (newProjectName.trim() && newProjectLink.trim()) {
+      setProjects([...projects, { name: newProjectName.trim(), link: newProjectLink.trim() }]);
       setNewProjectName("");
-      setNewProjectDesc("");
+      setNewProjectLink("");
       setShowProjectForm(false);
     }
   };
@@ -99,9 +109,11 @@ const EditProfile = () => {
   };
 
   const handleAddCert = () => {
-    if (newCert.trim() && !certifications.includes(newCert.trim())) {
-      setCertifications([...certifications, newCert.trim()]);
-      setNewCert("");
+    if (newCertName.trim() && newCertLink.trim()) {
+      setCertifications([...certifications, { name: newCertName.trim(), verificationLink: newCertLink.trim() }]);
+      setNewCertName("");
+      setNewCertLink("");
+      setShowCertForm(false);
     }
   };
 
@@ -313,20 +325,23 @@ const EditProfile = () => {
             <CardTitle className="text-lg">Availability</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2">
-              <Label htmlFor="availability">Hours per week</Label>
-              <Select value={availability} onValueChange={setAvailability}>
-                <SelectTrigger id="availability">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1-5">1-5 hours/week</SelectItem>
-                  <SelectItem value="5-10">5-10 hours/week</SelectItem>
-                  <SelectItem value="10-15">10-15 hours/week</SelectItem>
-                  <SelectItem value="15-20">15-20 hours/week</SelectItem>
-                  <SelectItem value="20+">20+ hours/week</SelectItem>
-                </SelectContent>
-              </Select>
+            <div className="space-y-4">
+              <Label>Hours per day</Label>
+              <div className="space-y-3">
+                <Slider
+                  value={[hoursPerDay]}
+                  onValueChange={(value) => setHoursPerDay(value[0])}
+                  min={1}
+                  max={10}
+                  step={1}
+                  className="w-full"
+                />
+                <div className="flex justify-between text-sm text-muted-foreground">
+                  <span>1 hour</span>
+                  <span className="font-medium text-foreground">{hoursPerDay} hours/day</span>
+                  <span>10 hours</span>
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -347,7 +362,7 @@ const EditProfile = () => {
                   <div className="flex items-start justify-between">
                     <div>
                       <h4 className="font-medium text-foreground">{project.name}</h4>
-                      <p className="text-sm text-muted-foreground mt-1">{project.description}</p>
+                      <p className="text-sm text-muted-foreground mt-1 break-all">{project.link}</p>
                     </div>
                     <Button
                       variant="ghost"
@@ -375,12 +390,12 @@ const EditProfile = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="projectDesc">Description</Label>
+                  <Label htmlFor="projectLink">Project Link</Label>
                   <Input
-                    id="projectDesc"
-                    placeholder="Brief description"
-                    value={newProjectDesc}
-                    onChange={(e) => setNewProjectDesc(e.target.value)}
+                    id="projectLink"
+                    placeholder="https://github.com/..."
+                    value={newProjectLink}
+                    onChange={(e) => setNewProjectLink(e.target.value)}
                   />
                 </div>
                 <div className="flex gap-3">
@@ -412,34 +427,63 @@ const EditProfile = () => {
               {certifications.map((cert, index) => (
                 <div
                   key={index}
-                  className="flex items-center justify-between p-3 rounded-lg border border-border"
+                  className="p-4 rounded-lg border border-border bg-muted/30"
                 >
-                  <span className="font-medium text-foreground">{cert}</span>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                    onClick={() => handleRemoveCert(index)}
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h4 className="font-medium text-foreground">{cert.name}</h4>
+                      <p className="text-sm text-muted-foreground mt-1 break-all">{cert.verificationLink}</p>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                      onClick={() => handleRemoveCert(index)}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
               ))}
             </div>
 
-            <div className="flex gap-3">
-              <Input
-                placeholder="Add a certification..."
-                value={newCert}
-                onChange={(e) => setNewCert(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && handleAddCert()}
-                className="flex-1"
-              />
-              <Button onClick={handleAddCert} className="gap-2">
+            {/* Add Certification Form */}
+            {showCertForm ? (
+              <div className="p-4 rounded-lg border border-border space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="certName">Certificate Name</Label>
+                  <Input
+                    id="certName"
+                    placeholder="Enter certificate name"
+                    value={newCertName}
+                    onChange={(e) => setNewCertName(e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="certLink">Verification Link</Label>
+                  <Input
+                    id="certLink"
+                    placeholder="https://..."
+                    value={newCertLink}
+                    onChange={(e) => setNewCertLink(e.target.value)}
+                  />
+                </div>
+                <div className="flex gap-3">
+                  <Button onClick={handleAddCert} className="gap-2">
+                    <Plus className="h-4 w-4" />
+                    Add Certification
+                  </Button>
+                  <Button variant="outline" onClick={() => setShowCertForm(false)}>
+                    Cancel
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <Button variant="outline" onClick={() => setShowCertForm(true)} className="gap-2">
                 <Plus className="h-4 w-4" />
-                Add
+                Add Certification
               </Button>
-            </div>
+            )}
           </CardContent>
         </Card>
 
